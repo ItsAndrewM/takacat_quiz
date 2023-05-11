@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ItsAndrewM/takacat_quiz.git",
+  "author": "Andrew McMillan <andrewmcmillan@precisionsailloft.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@woocommerce/woocommerce-rest-api": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "mongodb": "^5.4.0",
+    "morgan": "^1.10.0",
+    "node": "^20.1.0",
+    "nodemon": "^2.0.22"
+  }
+}
