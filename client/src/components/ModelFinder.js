@@ -3,34 +3,66 @@ import { styled } from "styled-components";
 import { quiz } from "../data/quiz";
 import Question from "./Question";
 import Answers from "./Answers";
+import backgroundBoat from "../assets/pexels-matheus-guimarães-611328.jpg";
 
 const ModelFinder = () => {
-  const [answers, setAnswers] = useState({ child: 0 });
-  const [index, setIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [questionIndex, setQuestionIndex] = useState(0);
 
   return (
     <Wrapper>
-      <Container>
-        <TrackerContainer>
-          <ol>
-            {quiz.map((question, index) => {
-              return <li key={index}></li>;
-            })}
-          </ol>
-        </TrackerContainer>
-        <AnswerContainer>
-          <Question index={index} />
-          <Answers
-            setAnswers={setAnswers}
-            index={index}
-            setIndex={setIndex}
-            answers={answers}
-          />
-        </AnswerContainer>
+      <Container style={{ backgroundImage: `url(${backgroundBoat})` }}>
+        <InnerContainer>
+          <TrackerContainer>
+            <ol>
+              {quiz.map((question, index) => {
+                if (answers[index]) {
+                  if (answers[index].length) {
+                    const temp = answers[index].map((val) => val.text);
+                    const str = temp.toString();
+                    const shortStr = str.slice(0, 17) + "...";
+                    return (
+                      <li key={index} title={str}>
+                        {shortStr}
+                      </li>
+                    );
+                  } else {
+                    let str = answers[index].text;
+                    return (
+                      <li key={index}>
+                        {answers[index] && answers[index].text}
+                      </li>
+                    );
+                  }
+                } else {
+                  return <li key={index}></li>;
+                }
+              })}
+            </ol>
+          </TrackerContainer>
+          <AnswerContainer>
+            <Question questionIndex={questionIndex} />
+            <Answers
+              setAnswers={setAnswers}
+              questionIndex={questionIndex}
+              setQuestionIndex={setQuestionIndex}
+              answers={answers}
+            />
+          </AnswerContainer>
+        </InnerContainer>
       </Container>
     </Wrapper>
   );
 };
+
+const InnerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 10px;
+`;
 
 const AnswerContainer = styled.div`
   width: 60%;
@@ -39,6 +71,7 @@ const AnswerContainer = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100%;
+  gap: 50px;
 `;
 
 const TrackerContainer = styled.div`
@@ -47,6 +80,7 @@ const TrackerContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
   height: 100%;
+  padding-right: 300px;
 `;
 
 const Container = styled.div`
@@ -54,7 +88,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+  min-height: 602px;
+  background-position: center;
+  background-size: cover;
 `;
 
 const Wrapper = styled.div`

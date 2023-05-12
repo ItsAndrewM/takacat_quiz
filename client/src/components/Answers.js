@@ -16,53 +16,148 @@ import dontMind from "../assets/5dont-mind-white_desktop_2x_desktop_0308.png";
 import nonHelmetCompatible from "../assets/3non-helmet-compatible-white_desktop_2x_desktop_0308.png";
 import noHood from "../assets/2no-hood-white_desktop_2x_desktop_0308.png";
 import { styled } from "styled-components";
+import ActiveButton from "./ActiveButton";
 
-const Answers = ({ setAnswers, index, setIndex, answers }) => {
+const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
   const [possibleAnswers, setPossibleAnswers] = useState();
+  const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
+  console.log(questionIndex);
+  console.log(answers);
   useEffect(() => {
     const filtered = quizAnswers.filter((answer) => {
-      return answer.id === Number(answers.child);
+      if (answers[0] && Number(questionIndex) !== 0) {
+        return (
+          answer.choicesId === questionIndex &&
+          answer.id === answers[questionIndex - 1].child
+        );
+      } else {
+        return answer.choicesId === questionIndex;
+      }
     });
-    console.log(answers);
-    console.log(filtered);
     setPossibleAnswers(filtered);
-  }, [index]);
+  }, [questionIndex]);
+
+  useEffect(() => {
+    if (possibleAnswers || multipleChoiceAnswers) {
+      setIsDisabled(!isDisabled);
+    }
+  }, [questionIndex, possibleAnswers, multipleChoiceAnswers]);
+
+  const handleBack = (e) => {
+    e.preventDefault();
+    setQuestionIndex(Number(questionIndex) - 1);
+    const temp = answers;
+    console.log(questionIndex);
+    const arr = temp.slice(0, Number(questionIndex) - 1);
+    setAnswers(arr);
+  };
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    setIsDisabled(false);
+    setQuestionIndex(Number(questionIndex) + 1);
+    const find = quizAnswers.find((ele) => {
+      return ele._id === Number(e.target.value);
+    });
+    const arr = [...new Set(answers)];
+    arr.push(find);
+    setAnswers(arr);
+  };
+
+  const handleAddMc = (e) => {
+    e.preventDefault();
+    setQuestionIndex(Number(questionIndex) + 1);
+    const arr = [...new Set(answers)];
+    arr.push(multipleChoiceAnswers);
+    setAnswers(arr);
+  };
 
   return (
     <Wrapper>
       <Container>
         {possibleAnswers &&
           possibleAnswers.map((val, index) => {
-            console.log(val.child);
-            return (
-              <button
-                key={index}
-                value={val.child}
-                onClick={(e) => {
-                  console.log(e.target);
-                  setIndex(Number(index) + 1);
-                  setAnswers({ child: e.target.value });
-                }}
-              >
-                {val.text}
-              </button>
-            );
+            if (val.multipleChoice) {
+              return (
+                <ActiveButton
+                  key={index}
+                  v={val._id}
+                  text={val.text}
+                  setQuestionIndex={setQuestionIndex}
+                  questionIndex={questionIndex}
+                  quizAnswers={quizAnswers}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                  setMultipleChoiceAnswers={setMultipleChoiceAnswers}
+                  multipleChoiceAnswers={multipleChoiceAnswers}
+                />
+              );
+            } else {
+              return (
+                <button key={index} value={val._id} onClick={handleAdd}>
+                  {val.text}
+                </button>
+              );
+            }
           })}
       </Container>
+      <OutterContainer>
+        {Number(questionIndex) !== 0 && (
+          <Button onClick={handleBack}>Back</Button>
+        )}
+        {multipleChoiceAnswers[0] ? (
+          <Button onClick={handleAddMc} disabled={isDisabled}>
+            Next
+          </Button>
+        ) : (
+          <Button
+            disabled={isDisabled}
+            onClick={(e) => setQuestionIndex(Number(questionIndex) + 1)}
+          >
+            Next
+          </Button>
+        )}
+      </OutterContainer>
     </Wrapper>
   );
 };
 
+const Button = styled.button`
+  width: 100px;
+  height: 50px;
+  background-color: #c0c0c0;
+  &:hover {
+    opacity: 0.5;
+    border: 1px solid var(--accent-secondary-color);
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+`;
+
+const OutterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+`;
+
 const Container = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
 `;
 
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export default Answers;
