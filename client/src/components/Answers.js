@@ -26,7 +26,12 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
   console.log(answers);
   useEffect(() => {
     const filtered = quizAnswers.filter((answer) => {
-      if (answers[0] && Number(questionIndex) !== 0) {
+      if (answers[0] && Number(questionIndex) !== 0 && !answer.length) {
+        return (
+          answer.choicesId === questionIndex &&
+          answer.id === answers[questionIndex - 1].child
+        );
+      } else if (answer.length) {
         return (
           answer.choicesId === questionIndex &&
           answer.id === answers[questionIndex - 1].child
