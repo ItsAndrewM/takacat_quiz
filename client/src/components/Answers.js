@@ -22,8 +22,6 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
   const [possibleAnswers, setPossibleAnswers] = useState();
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
-  console.log(questionIndex);
-  console.log(answers);
   useEffect(() => {
     const filtered = quizAnswers.filter((answer) => {
       if (answers[0] && Number(questionIndex) !== 0 && !answer.length) {
@@ -40,7 +38,7 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
         return answer.choicesId === questionIndex;
       }
     });
-    setPossibleAnswers(filtered);
+    setPossibleAnswers(filtered[0]);
   }, [questionIndex]);
 
   useEffect(() => {
@@ -82,7 +80,8 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
     <Wrapper>
       <Container>
         {possibleAnswers &&
-          possibleAnswers.map((val, index) => {
+          possibleAnswers.questions &&
+          possibleAnswers.questions.map((val, index) => {
             if (val.multipleChoice) {
               return (
                 <ActiveButton
@@ -96,6 +95,7 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
                   setAnswers={setAnswers}
                   setMultipleChoiceAnswers={setMultipleChoiceAnswers}
                   multipleChoiceAnswers={multipleChoiceAnswers}
+                  questions={possibleAnswers.questions}
                 />
               );
             } else {

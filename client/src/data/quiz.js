@@ -25,4 +25,14 @@ export const quiz = [
     content: "",
     choicesId: 4,
   },
+  {
+    title: "What type of protection do you need?",
+    content: "",
+    choicesId: 5,
+  },
+  {
+    title: "Now choose your fit",
+    content: "",
+    choicesId: 6,
+  },
 ];

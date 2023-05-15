@@ -4,14 +4,28 @@ import styled from "styled-components";
 const Home = () => {
   return (
     <Wrapper>
-      <NavLink to={"/model-finder"}>
+      <NavLink
+        to={"/model-finder"}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textDecoration: "none",
+        }}
+      >
         <Button>Model Finder</Button>
       </NavLink>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+`;
 
 const Button = styled.button`
   background: #18a0fb;

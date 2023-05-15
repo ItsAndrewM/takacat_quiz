@@ -34,8 +34,6 @@ const ModelFinder = () => {
                       </li>
                     );
                   }
-                } else {
-                  return <li key={index}></li>;
                 }
               })}
             </ol>

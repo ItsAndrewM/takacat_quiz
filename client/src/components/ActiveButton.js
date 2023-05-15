@@ -11,15 +11,16 @@ const ActiveButton = ({
   setAnswers,
   setMultipleChoiceAnswers,
   multipleChoiceAnswers,
+  questions,
 }) => {
   const [isActive, setIsActive] = useState(false);
-  console.log(multipleChoiceAnswers);
   const handleActiveClick = (e) => {
     e.preventDefault();
     setIsActive(!isActive);
-    const find = quizAnswers.find((ele) => {
+    const find = questions.find((ele) => {
       return ele._id === Number(e.target.value);
     });
+
     const temp = [...new Set(multipleChoiceAnswers)];
     temp.push(find);
     setMultipleChoiceAnswers(temp);
