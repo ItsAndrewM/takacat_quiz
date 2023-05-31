@@ -1,11 +1,29 @@
 import { styled } from "styled-components";
+import { useEffect, useState } from "react";
 import { quiz } from "../data/quiz";
 
-const Question = ({ questionIndex }) => {
+const Question = ({ questionIndex, choice }) => {
+  const [quizQ, setQuizQ] = useState(
+    quiz.find((ele) => {
+      return ele.choicesId === choice;
+    })
+  );
+
+  useEffect(() => {
+    const filtered = quiz.find((ele) => {
+      return ele.choicesId === choice;
+    });
+    setQuizQ(filtered);
+  }, [choice]);
+
   return (
     <Wrapper>
-      <H>{quiz[questionIndex].title}</H>
-      {quiz[questionIndex].content && <P>{quiz[questionIndex].content}</P>}
+      {quizQ && (
+        <>
+          <H>{quizQ.title}</H>
+          {quizQ.content && <P>{quizQ.content}</P>}
+        </>
+      )}
     </Wrapper>
   );
 };

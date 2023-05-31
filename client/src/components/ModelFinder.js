@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { quiz } from "../data/quiz";
 import Question from "./Question";
@@ -8,13 +8,14 @@ import backgroundBoat from "../assets/pexels-matheus-guimarães-611328.jpg";
 const ModelFinder = () => {
   const [answers, setAnswers] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [choice, setChoice] = useState(0);
 
   return (
     <Wrapper>
       <Container style={{ backgroundImage: `url(${backgroundBoat})` }}>
         <InnerContainer>
           <TrackerContainer>
-            <ol>
+            <Ol>
               {quiz.map((question, index) => {
                 if (answers[index]) {
                   if (answers[index].length) {
@@ -36,15 +37,16 @@ const ModelFinder = () => {
                   }
                 }
               })}
-            </ol>
+            </Ol>
           </TrackerContainer>
           <AnswerContainer>
-            <Question questionIndex={questionIndex} />
+            <Question questionIndex={questionIndex} choice={choice} />
             <Answers
               setAnswers={setAnswers}
               questionIndex={questionIndex}
               setQuestionIndex={setQuestionIndex}
               answers={answers}
+              setChoice={setChoice}
             />
           </AnswerContainer>
         </InnerContainer>
@@ -52,6 +54,14 @@ const ModelFinder = () => {
     </Wrapper>
   );
 };
+
+const Ol = styled.ol`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 50%;
+  width: 100%;
+`;
 
 const InnerContainer = styled.div`
   width: 100%;
@@ -78,7 +88,7 @@ const TrackerContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
   height: 100%;
-  padding-right: 300px;
+  /* padding-right: 300px; */
 `;
 
 const Container = styled.div`

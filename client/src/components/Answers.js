@@ -18,10 +18,17 @@ import noHood from "../assets/2no-hood-white_desktop_2x_desktop_0308.png";
 import { styled } from "styled-components";
 import ActiveButton from "./ActiveButton";
 
-const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
+const Answers = ({
+  setAnswers,
+  questionIndex,
+  setQuestionIndex,
+  answers,
+  setChoice,
+}) => {
   const [possibleAnswers, setPossibleAnswers] = useState();
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
+
   useEffect(() => {
     const filtered = quizAnswers.filter((answer) => {
       if (answers[0] && Number(questionIndex) !== 0 && !answer.length) {
@@ -38,7 +45,9 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
         return answer.choicesId === questionIndex;
       }
     });
+    console.log(filtered)
     setPossibleAnswers(filtered[0]);
+    setChoice(filtered[0].choicesId);
   }, [questionIndex]);
 
   useEffect(() => {
@@ -51,7 +60,6 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
     e.preventDefault();
     setQuestionIndex(Number(questionIndex) - 1);
     const temp = answers;
-    console.log(questionIndex);
     const arr = temp.slice(0, Number(questionIndex) - 1);
     setAnswers(arr);
   };
@@ -60,8 +68,13 @@ const Answers = ({ setAnswers, questionIndex, setQuestionIndex, answers }) => {
     e.preventDefault();
     setIsDisabled(false);
     setQuestionIndex(Number(questionIndex) + 1);
-    const find = quizAnswers.find((ele) => {
-      return ele._id === Number(e.target.value);
+    let find = {};
+    quizAnswers.forEach((ele) => {
+      ele.questions.forEach((element) => {
+        if (element._id === Number(e.target.value)) {
+          find = element;
+        }
+      });
     });
     const arr = [...new Set(answers)];
     arr.push(find);
