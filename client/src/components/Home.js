@@ -1,20 +1,24 @@
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 const Home = () => {
   return (
     <Wrapper>
-      <NavLink
+      <NavItem
         to={"/model-finder"}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          textDecoration: "none",
+          // display: "flex",
+          // justifyContent: "center",
+          // alignItems: "center",
+          // textDecoration: "none",
         }}
       >
         <Button>Model Finder</Button>
-      </NavLink>
+      </NavItem>
+      <NavItem to={"/test"}>
+        <Button>Test</Button>
+      </NavItem>
+
     </Wrapper>
   );
 };
@@ -25,6 +29,8 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-content: center;
+  flex-direction: column;
+  border: 1px solid red;
 `;
 
 const Button = styled.button`
@@ -38,5 +44,9 @@ const Button = styled.button`
     cursor: pointer;
   }
 `;
+
+const NavItem = styled(NavLink)`
+
+`
 
 export default Home;

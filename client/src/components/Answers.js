@@ -45,7 +45,6 @@ const Answers = ({
         return answer.choicesId === questionIndex;
       }
     });
-    console.log(filtered)
     setPossibleAnswers(filtered[0]);
     setChoice(filtered[0].choicesId);
   }, [questionIndex]);
