@@ -5,8 +5,8 @@ const FormQuestion = ({ q, qIndex, setQIndex }) => {
         qIndex === q.index &&
         <Fieldset>
             <Container style={{ flexDirection: "column" }}>
-                <Legend>{q.title}</Legend>
-                <p style={{ color: "black" }}>{q.content}</p>
+                <Legend><H>{q.title}</H></Legend>
+                <P>{q.content}</P>
             </Container>
             <Container>
                 {q.questions.map((a, index) => {
@@ -23,6 +23,16 @@ const FormQuestion = ({ q, qIndex, setQIndex }) => {
     );
 }
 
+const P = styled.p`
+width: 100%;
+text-align: left;
+`
+
+const H = styled.h1`
+    text-align: left;
+    width: 100%;
+`
+
 const Container = styled.div`
     width: 100%;
     display: flex;
@@ -30,7 +40,7 @@ const Container = styled.div`
     align-items: center;
     flex-wrap: wrap;
     gap: 50px;
-
+    padding: 2em 0;
 `
 
 const Fieldset = styled.fieldset`
@@ -41,9 +51,9 @@ const Fieldset = styled.fieldset`
 `
 
 const Legend = styled.legend`
-    background-color: #000;
-    color: #fff;
+    color: #ffffff;
     padding: 3px 6px;
+    width: 100%;
 `
 
 const Input = styled.input`
@@ -52,8 +62,9 @@ const Input = styled.input`
     display: none;
 
     &:checked + span{
-        background: blue;
-        color: white;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #FFFFFF;
+        backdrop-filter: blur(16px)
     }
 `
 
@@ -65,14 +76,13 @@ const Label = styled.label`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: lightgrey;
+    
     text-transform: capitalize;
   
 `
 
 const Span = styled.span`
     color: black;
-    background-color: lightgrey;
     line-height: 2em;
     text-align: center;
     width: 100%;
@@ -80,9 +90,14 @@ const Span = styled.span`
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 1px solid var(--accent-secondary-color);
+    /* background-color: var(--accent-primary-color); */
+    backdrop-filter: blur(9px);
+    color: white;
+    background: inherit;
       &:hover {
         cursor: pointer;
-        background-color: red;
+        border: 2px solid var(--accent-secondary-color);
     }
 `
 export default FormQuestion;

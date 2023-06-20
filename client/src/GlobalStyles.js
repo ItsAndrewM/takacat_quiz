@@ -86,6 +86,7 @@ export default createGlobalStyle`
     p, button, a {
         color: var(--accent-secondary-color);
         font-size: 16px;
+        
     }
     h2 {
         font-size: 28px;

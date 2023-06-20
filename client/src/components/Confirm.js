@@ -4,6 +4,8 @@ import { ProductsContext } from "./ProductsContext";
 import styled from "styled-components/macro";
 import { CircularProgress } from '@mui/material';
 import { boats } from "../data/boats";
+import AccessoryCard from "./AccessoryCard";
+import FeaturedCard from "./FeaturedCard";
 
 export const randomNum = (num) => {
     return Math.floor(Math.random() * num);
@@ -26,6 +28,19 @@ export const featuredProducts = (list, emptyList) => {
     }
 }
 
+const getBiggestIndex = (object, list) => {
+    let index = -1;
+    Object.keys(object).forEach((ele) => {
+        const model = list.findIndex((o) => {
+            return o[ele] === object[ele]
+        })
+        if (model > index) {
+            index = model;
+        }
+    })
+    return list[index];
+}
+
 const Confirm = () => {
     const [featured, setFeatured] = useState();
     const [featuredAcc, setFeaturedAcc] = useState();
@@ -33,28 +48,22 @@ const Confirm = () => {
     const { products } = useContext(ProductsContext)
 
     useEffect(() => {
-        Object.keys(location.state.formData).forEach((val) => {
-            const model = boats.find((ele) => {
-                return ele[val] === location.state.formData[val]
+        if (location.state.formData && boats) {
+            const model = getBiggestIndex(location.state.formData, boats)
+            const found = products.filter((val) => {
+                return val.name.toLowerCase().includes(model.model)
             })
-            if (model && products) {
-                const found = products.filter((a) => {
-                    return a.name.toLowerCase().includes(model.model)
-                })
-                setFeatured(found)
-            }
-        })
-    }, [location.state, products])
+            setFeatured(found)
+        }
+    }, [location.state.formData])
 
     useEffect(() => {
-        const arr = [];
 
         if (products) {
             const arr = [];
             const acc = []
             products.forEach((a) => {
                 const find = a.categories.find((b) => {
-                    console.log(b)
                     return b.name.toLowerCase().includes('accessories');
                 })
                 if (find) {
@@ -62,7 +71,6 @@ const Confirm = () => {
                 }
             })
             const c = featuredProducts(arr, acc);
-            console.log(c)
             setFeaturedAcc(c)
         }
 
@@ -73,22 +81,30 @@ const Confirm = () => {
     return (
         <Wrapper>
             <Container>
-                <H1>Based on your asnwers, we reccomend...</H1>
+                <H1>Based on your answers, we reccomend...</H1>
             </Container>
             <Container>
-                {featured ? featured.map((val) => {
-                    return (
-                        <CardWrapper>
+                {featured ?
 
-                            <H>{val.name}</H>
-                            <ImageWrapper>
-                                <Img src={val.images[0].src} />
-                            </ImageWrapper>
-
-                        </CardWrapper>
-                    )
-                })
-
+                    <>
+                        {featured.map((val) => {
+                            return (
+                                <FeaturedCard val={val} />
+                            )
+                        })}
+                        <div style={{ width: "100%", border: "1px solid red" }}>
+                            <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                                <H1>Your answers:</H1>
+                                <ul style={{ listStyleType: "none" }}>
+                                    {Object.keys(location.state.formData).map((val) => {
+                                        return (
+                                            <li style={{ color: "black", textAlign: "left", width: "100%" }}>{val}: {location.state.formData[val]}</li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                        </div>
+                    </>
                     :
                     <CircularProgress />
                 }
@@ -99,17 +115,9 @@ const Confirm = () => {
             <Container>
                 {featuredAcc ? featuredAcc.map((val) => {
                     return (
-                        <CardWrapper>
-
-                            <H>{val.name}</H>
-                            <ImageWrapper>
-                                <Img src={val.images[0].src} />
-                            </ImageWrapper>
-
-                        </CardWrapper>
+                        <AccessoryCard val={val} />
                     )
                 })
-
                     :
                     <CircularProgress />
                 }
