@@ -1,6 +1,11 @@
 import styled from "styled-components/macro";
+import audio from "../assets/sound/audio.mp3"
 
 const FormQuestion = ({ q, qIndex, setQIndex }) => {
+    const playSound = () => {
+        new Audio(audio).play()
+    }
+
     return (
         qIndex === q.index &&
         <Fieldset>

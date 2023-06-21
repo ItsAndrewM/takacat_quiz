@@ -4,6 +4,11 @@ import FormQuestion from "./FormQuestion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backgroundBoat from "../assets/pexels-matheus-guimarães-611328.jpg";
+import next from "../assets/sound/next.mp3"
+
+const playSound = (soundFile) => {
+    new Audio(soundFile).play();
+}
 
 const Input = () => {
     const [formData, setFormData] = useState({});
@@ -35,13 +40,10 @@ const Input = () => {
             return val.key === e.target.name
         })
         if (find.type === "checkbox") {
-
             const exists = arr.find((val) => {
                 return e.target.value === val;
             })
             if (exists) {
-
-
                 const filteredOut = arr.filter((val) => {
                     return e.target.value !== val;
                 })
@@ -58,10 +60,9 @@ const Input = () => {
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
     }
-
     useEffect(() => {
-
-    }, [arr])
+        console.log(formData)
+    }, [formData])
 
     const handleNext = (e) => {
         if (arr.length !== 0) {
@@ -70,7 +71,7 @@ const Input = () => {
         e.preventDefault();
 
         setQIndex(qIndex + 1);
-
+        // playSound(next)
     }
 
 

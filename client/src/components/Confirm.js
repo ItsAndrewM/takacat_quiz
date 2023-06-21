@@ -6,6 +6,7 @@ import { CircularProgress } from '@mui/material';
 import { boats } from "../data/boats";
 import AccessoryCard from "./AccessoryCard";
 import FeaturedCard from "./FeaturedCard";
+import Comparison from "./Comparison";
 
 export const randomNum = (num) => {
     return Math.floor(Math.random() * num);
@@ -38,7 +39,13 @@ const getBiggestIndex = (object, list) => {
             index = model;
         }
     })
-    return list[index];
+    if (index !== -1) {
+        return list[index];
+    }
+    else {
+        return list[randomNum(list.length)]
+    }
+
 }
 
 const Confirm = () => {
@@ -48,8 +55,9 @@ const Confirm = () => {
     const { products } = useContext(ProductsContext)
 
     useEffect(() => {
-        if (location.state.formData && boats) {
+        if (location.state.formData && boats && products) {
             const model = getBiggestIndex(location.state.formData, boats)
+            console.log(boats)
             const found = products.filter((val) => {
                 return val.name.toLowerCase().includes(model.model)
             })
@@ -93,12 +101,19 @@ const Confirm = () => {
                             )
                         })}
                         <div style={{ width: "100%", border: "1px solid red" }}>
-                            <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                            <div style={{ width: "100%", display: "flex", justifyContent: "Center", flexWrap: "wrap", gap: "20px" }}>
                                 <H1>Your answers:</H1>
-                                <ul style={{ listStyleType: "none" }}>
-                                    {Object.keys(location.state.formData).map((val) => {
+                                <ul style={{ listStyleType: "none", flexDirection: "column", alignItems: "flex-start" }}>
+                                    {Object.keys(location.state.formData).map((val, index) => {
                                         return (
-                                            <li style={{ color: "black", textAlign: "left", width: "100%" }}>{val}: {location.state.formData[val]}</li>
+                                            <li key={index} style={{ color: "black", textAlign: "left", width: "100%" }}>{val}: {location.state.formData[val]}</li>
+                                        )
+                                    })}
+                                </ul>
+                                <ul style={{ listStyleType: "none" }}>
+                                    {featured.map((val, index) => {
+                                        return (
+                                            <li key={index} style={{ color: "black", textAlign: "left", width: "100%" }}>{val.name}: </li>
                                         )
                                     })}
                                 </ul>
@@ -121,6 +136,9 @@ const Confirm = () => {
                     :
                     <CircularProgress />
                 }
+            </Container>
+            <Container>
+                <Comparison props={featured} />
             </Container>
         </Wrapper>
     );
@@ -183,12 +201,5 @@ const NavItem = styled(NavLink)`
     height: 100%;
 `
 
-const Img = styled.img`
-  width: 500px;
-  max-width: 100%;
-  height: 350px;
-  max-height: 250px;
-  object-fit: contain;
-  border-radius: 5px;
-`
+
 export default Confirm;
