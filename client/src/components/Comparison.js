@@ -1,10 +1,32 @@
 import styled from "styled-components/macro";
 import { tableHeader } from "../data/tableHeader";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { boats } from "../data/boats";
+import { ProductsContext } from "./ProductsContext";
 
 const Comparison = ({ props }) => {
     const [prodInfo, setProdInfo] = useState();
+    const { products } = useContext(ProductsContext)
+    const [selection, setSelection] = useState();
+
+    const handleChange = (e) => {
+        console.log(e.target.value)
+        if (products) {
+            const select = products.filter((val) => {
+                return val.name.toLowerCase().includes(e.target.value);
+            })
+            if (select.length) {
+                setSelection(select)
+            }
+        }
+
+    }
+
+    useEffect(() => {
+        if (products) {
+
+        }
+    }, [])
 
     useEffect(() => {
         if (props) {
@@ -19,6 +41,7 @@ const Comparison = ({ props }) => {
             // console.log(mapped)
         }
     }, [props])
+
     return (
         <>
             <Table>
@@ -26,31 +49,63 @@ const Comparison = ({ props }) => {
                 <TableHeader>
                     {tableHeader.map((val, index) => {
                         return (
-                            <TableCell key={index}>{val.name}</TableCell>
+                            <TableCell style={{ color: "black" }} key={index}>{val.name}{val.icon}</TableCell>
                         )
                     })}
                 </TableHeader>
-                {props && props.map((val) => {
+                {/* {props && props.map((val) => { */}
+                {/* // return ( */}
+                <TableRow>
+                    <TableCell>{props && <Img src={props[0].images[0].src} />}</TableCell>
+                    <TableCell>Fishing or whatever</TableCell>
+                    {prodInfo && Object.keys(prodInfo[0]).map((val, index) => {
+                        return (
+                            <TableCell>{prodInfo[0][val]}</TableCell>
+                        )
+
+                    })}
+                </TableRow>
+                {selection && selection.map((val, index) => {
+                    const find = boats.find((ele) => {
+                        return val.name.toLowerCase().includes(ele.model);
+                    })
+                    console.log(find)
                     return (
                         <TableRow>
                             <TableCell><Img src={val.images[0].src} /></TableCell>
-                            <TableCell>Fishing or whatever</TableCell>
-                            {prodInfo && Object.keys(prodInfo[0]).map((val, index) => {
-                                return (
-                                    <TableCell>{prodInfo[0][val]}</TableCell>
-                                )
-
-                            })}
+                            <TableCell>Hunting and maybe something else</TableCell>
+                            <TableCell>{val.name}</TableCell>
+                            <TableCell>{find.capacity}</TableCell>
+                            <TableCell>{find.HP}</TableCell>
+                            <TableCell>{find.weight}</TableCell>
+                            <TableCell>{find.widthHeight}</TableCell>
                         </TableRow>
                     )
                 })}
+                {/* )
+                })} */}
             </Table>
             <Container>
-
+                <InputWrapper>
+                    <select onChange={handleChange}>
+                        <option>Select a model</option>
+                        {boats.map((val, index) => {
+                            if (props && !props[0].name.toLowerCase().includes(val.model)) {
+                                return (
+                                    <option key={index} value={val.model}>Takacat {val.model}S/LX</option>
+                                )
+                            }
+                        })}
+                    </select>
+                </InputWrapper>
             </Container>
         </>
     );
 }
+
+const InputWrapper = styled.div`
+
+`
 
 const Container = styled.div`
 
@@ -66,11 +121,11 @@ const TableRow = styled.div`
     display: flex;
     justify-content: space-between;
     flex-wrap: nowrap;
-    border: 1px solid blue;
 `
 
 const TableHeader = styled.div`
     width: 100%;
+    max-width: 100%;
     display: flex;
     justify-content: space-between;
     flex-wrap: nowrap;
@@ -79,9 +134,11 @@ const TableHeader = styled.div`
 
 const TableCell = styled.div`
     width: 100%;
+    max-width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 5px;
     border: 1px solid red;
 `
 

@@ -10,9 +10,9 @@ const App = () => {
     <BrowserRouter>
       <GlobalStyles />
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} /> */}
         <Route path="/model-finder" element={<ModelFinder />} />
-        <Route path="/test" element={<Input />} />
+        <Route path="/" element={<Input />} />
         <Route path="/confirmation" element={<Confirm />} />
       </Routes>
     </BrowserRouter>

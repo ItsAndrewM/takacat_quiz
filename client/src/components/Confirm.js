@@ -7,6 +7,9 @@ import { boats } from "../data/boats";
 import AccessoryCard from "./AccessoryCard";
 import FeaturedCard from "./FeaturedCard";
 import Comparison from "./Comparison";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUsers, faWeightHanging, faGauge, faRulerCombined, faBoxOpen, faCampground, faSuitcaseRolling, faTruckFast } from "@fortawesome/free-solid-svg-icons"
+import DinghySvg from "./DinghySvg";
 
 export const randomNum = (num) => {
     return Math.floor(Math.random() * num);
@@ -53,6 +56,7 @@ const Confirm = () => {
     const [featuredAcc, setFeaturedAcc] = useState();
     const location = useLocation();
     const { products } = useContext(ProductsContext)
+    const [modelInfo, setModelInfo] = useState();
 
     useEffect(() => {
         if (location.state.formData && boats && products) {
@@ -62,6 +66,8 @@ const Confirm = () => {
                 return val.name.toLowerCase().includes(model.model)
             })
             setFeatured(found)
+            console.log(model)
+            setModelInfo(model)
         }
     }, [location.state.formData])
 
@@ -104,11 +110,18 @@ const Confirm = () => {
                             <div style={{ width: "100%", display: "flex", justifyContent: "Center", flexWrap: "wrap", gap: "20px" }}>
                                 <H1>Your answers:</H1>
                                 <ul style={{ listStyleType: "none", flexDirection: "column", alignItems: "flex-start" }}>
-                                    {Object.keys(location.state.formData).map((val, index) => {
+                                    <li style={{ color: "black", borderBottom: "1px solid black" }}><DinghySvg />Takacat {modelInfo && modelInfo.model}</li>
+                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faUsers} />{location.state.formData.capacity}</li>
+                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faGauge} />{location.state.formData.HP}</li>
+                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faTruckFast} />{location.state.formData.weight}</li>
+                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faSuitcaseRolling} />{location.state.formData.widthHeight}</li>
+                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faBoxOpen} />{location.state.formData.storage}</li>
+
+                                    {/* {Object.keys(location.state.formData).map((val, index) => {
                                         return (
                                             <li key={index} style={{ color: "black", textAlign: "left", width: "100%" }}>{val}: {location.state.formData[val]}</li>
                                         )
-                                    })}
+                                    })} */}
                                 </ul>
                                 <ul style={{ listStyleType: "none" }}>
                                     {featured.map((val, index) => {
