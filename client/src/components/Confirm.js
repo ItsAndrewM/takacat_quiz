@@ -110,12 +110,12 @@ const Confirm = () => {
                             <div style={{ width: "100%", display: "flex", justifyContent: "Center", flexWrap: "wrap", gap: "20px" }}>
                                 <H1>Your answers:</H1>
                                 <ul style={{ listStyleType: "none", flexDirection: "column", alignItems: "flex-start" }}>
-                                    <li style={{ color: "black", borderBottom: "1px solid black" }}><DinghySvg />Takacat {modelInfo && modelInfo.model}</li>
-                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faUsers} />{location.state.formData.capacity}</li>
-                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faGauge} />{location.state.formData.HP}</li>
-                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faTruckFast} />{location.state.formData.weight}</li>
-                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faSuitcaseRolling} />{location.state.formData.widthHeight}</li>
-                                    <li style={{ color: "black" }}><FontAwesomeIcon icon={faBoxOpen} />{location.state.formData.storage}</li>
+                                    <Li style={{ justifyContent: "center", borderBottom: "1px solid black" }}><DinghySvg />Takacat {modelInfo && modelInfo.model}</Li>
+                                    <Li ><FontAwesomeIcon icon={faUsers} />{location.state.formData.capacity}</Li>
+                                    <Li ><FontAwesomeIcon icon={faGauge} />{location.state.formData.HP}</Li>
+                                    <Li ><FontAwesomeIcon icon={faTruckFast} />{location.state.formData.weight}</Li>
+                                    <Li ><FontAwesomeIcon icon={faSuitcaseRolling} />{location.state.formData.widthHeight}</Li>
+                                    <Li ><FontAwesomeIcon icon={faBoxOpen} />{location.state.formData.storage}</Li>
 
                                     {/* {Object.keys(location.state.formData).map((val, index) => {
                                         return (
@@ -123,13 +123,13 @@ const Confirm = () => {
                                         )
                                     })} */}
                                 </ul>
-                                <ul style={{ listStyleType: "none" }}>
+                                {/* <ul style={{ listStyleType: "none" }}>
                                     {featured.map((val, index) => {
                                         return (
                                             <li key={index} style={{ color: "black", textAlign: "left", width: "100%" }}>{val.name}: </li>
                                         )
                                     })}
-                                </ul>
+                                </ul> */}
                             </div>
                         </div>
                     </>
@@ -156,6 +156,15 @@ const Confirm = () => {
         </Wrapper>
     );
 }
+
+const Li = styled.li`
+width: 100%;
+    color: black;
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 0.5em;
+    gap: .5em
+`
 
 const H1 = styled.h1`
     width: 100%;
