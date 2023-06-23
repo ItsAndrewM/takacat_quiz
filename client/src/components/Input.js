@@ -9,30 +9,19 @@ import next from "../assets/sound/next.mp3"
 const playSound = (soundFile) => {
     new Audio(soundFile).play();
 }
-
+let arr = [];
 const Input = () => {
     const [formData, setFormData] = useState({});
     const [qIndex, setQIndex] = useState(0);
     const [isActive, setIsActive] = useState(false);
-    let arr = [];
-    const navigate = useNavigate();
+    const [anArr, setAnArr] = useState([]);
 
-    useEffect(() => {
-        console.log(formData[Object.keys(formData)[qIndex - 1]])
-        if (formData[Object.keys(formData)[qIndex - 1]]) {
-            console.log(formData[Object.keys(formData)[qIndex - 1]])
-            setIsActive(true)
-        }
-        else {
-            setIsActive(false)
-        }
-    }, [formData])
+    let obj = {};
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsActive(false)
     }, [qIndex])
-
-
 
 
     const handleChange = (e) => {
@@ -41,35 +30,27 @@ const Input = () => {
         })
         if (find.type === "checkbox") {
             const exists = arr.find((val) => {
-                return e.target.value === val;
+                return val.toLowerCase().includes((e.target.value).toLowerCase());
             })
-            if (exists) {
-                const filteredOut = arr.filter((val) => {
-                    return e.target.value !== val;
-                })
-                arr = filteredOut
-                setFormData({ [e.target.name]: arr });
+            if (!exists) {
+                arr.push(e.target.value)
             }
             else {
+                const filteredOut = arr.filter((val) => {
+                    return !val.toLowerCase().includes((e.target.value).toLowerCase());
+                })
+                arr = filteredOut
 
-                arr.push(e.target.value);
-                console.log(arr)
             }
+            setFormData({ ...formData, [e.target.name]: arr });
         }
         else {
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
     }
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
 
     const handleNext = (e) => {
-        if (arr.length !== 0) {
-            setFormData({ ...formData, "useCase": arr });
-        }
         e.preventDefault();
-
         setQIndex(qIndex + 1);
         // playSound(next)
     }
@@ -86,6 +67,16 @@ const Input = () => {
             setQIndex(qIndex - 1);
         }
     }
+
+    useEffect(() => {
+        if (Object.keys(formData)[qIndex - 1]) {
+            setIsActive(true)
+        }
+        else {
+            setIsActive(false)
+        }
+    }, [formData])
+
     return (
         <Wrapper>
             <Container style={{ backgroundImage: `url(${backgroundBoat})`, minHeight: "100vh" }}>
@@ -95,7 +86,7 @@ const Input = () => {
                             <Legend><h1 style={{ padding: "0 0 .25em 0" }}>Takacat Boat Model Finder</h1></Legend>
                             <p>Takacat boats embody the spirit of adventure and deliver an unparalleled on-water experience. With their exceptional versatility, stability, comfort, durability, and user-friendly design, Takacat day boats are the perfect choice for water enthusiasts seeking excitement and unforgettable moments. Find what’s right for you.</p>
                             <ButtonWrapper>
-                                <Button onClick={(e) => { e.preventDefault(); setQIndex(1); console.log(qIndex) }}>Start</Button>
+                                <Button onClick={(e) => { e.preventDefault(); setQIndex(1) }}>Start</Button>
                             </ButtonWrapper>
                         </Fieldset>
                     }
