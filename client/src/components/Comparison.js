@@ -10,7 +10,6 @@ const Comparison = ({ props }) => {
     const [selection, setSelection] = useState();
 
     const handleChange = (e) => {
-        console.log(e.target.value)
         if (products) {
             const select = products.filter((val) => {
                 return val.name.toLowerCase().includes(e.target.value);
@@ -23,12 +22,6 @@ const Comparison = ({ props }) => {
     }
 
     useEffect(() => {
-        if (products) {
-
-        }
-    }, [])
-
-    useEffect(() => {
         if (props) {
             let mapped = props.map((val) => {
                 const found = boats.findIndex((ele) => {
@@ -37,8 +30,6 @@ const Comparison = ({ props }) => {
                 return boats[found]
             })
             setProdInfo(mapped)
-            // mapped = [...new Set(mapped)]
-            // console.log(mapped)
         }
     }, [props])
 
@@ -56,7 +47,7 @@ const Comparison = ({ props }) => {
                 {/* {props && props.map((val) => { */}
                 {/* // return ( */}
                 <TableRow>
-                    <TableCell>{props && <Img src={props[0].images[0].src} />}</TableCell>
+                    <TableCell>{props && props.length && <Img src={props[0].images[0].src} />}</TableCell>
                     <TableCell>Fishing or whatever</TableCell>
                     {prodInfo && Object.keys(prodInfo[0]).map((val, index) => {
                         return (
@@ -69,7 +60,6 @@ const Comparison = ({ props }) => {
                     const find = boats.find((ele) => {
                         return val.name.toLowerCase().includes(ele.model);
                     })
-                    console.log(find)
                     return (
                         <TableRow>
                             <TableCell><Img src={val.images[0].src} /></TableCell>
@@ -90,7 +80,7 @@ const Comparison = ({ props }) => {
                     <select onChange={handleChange}>
                         <option>Select a model</option>
                         {boats.map((val, index) => {
-                            if (props && !props[0].name.toLowerCase().includes(val.model)) {
+                            if (props && props.length && !props[0].name.toLowerCase().includes(val.model)) {
                                 return (
                                     <option key={index} value={val.model}>Takacat {val.model}S/LX</option>
                                 )

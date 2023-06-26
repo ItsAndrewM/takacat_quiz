@@ -1,16 +1,14 @@
 import styled from "styled-components/macro";
 
 const FeaturedCard = ({ val }) => {
-    return (
-        <CardWrapper>
-
-            <H>{val.name}</H>
-            <ImageWrapper>
-                <Img src={val.images[0].src} />
-            </ImageWrapper>
-
-        </CardWrapper>
-    );
+  return (
+    <CardWrapper>
+      <H>{val.name}</H>
+      <ImageWrapper>
+        <Img src={val.images[0].src} />
+      </ImageWrapper>
+    </CardWrapper>
+  );
 }
 
 const ImageWrapper = styled.div`
@@ -24,8 +22,7 @@ const ImageWrapper = styled.div`
 const Img = styled.img`
   width: 500px;
   max-width: 100%;
-  height: 350px;
-  max-height: 250px;
+  height: 100%;
   object-fit: contain;
   border-radius: 5px;
 `
@@ -37,15 +34,13 @@ const H = styled.h3`
 `
 
 const CardWrapper = styled.div`
-  width: 40%;
-  height: 30%;
-  margin: 3%;
+  width: 100%;
+  min-height: 30%;
   display: flex;
   justify-content: space-between;
-  gap: 10px;
   flex-direction: column;
   border-radius: 5px;
-  padding: 10px;
+  padding: 1em;
 `
 
 export default FeaturedCard;

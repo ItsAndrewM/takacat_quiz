@@ -9,42 +9,52 @@ export const takaQuiz = [
         questions: [
             {
                 name: "RV",
+                value: "RV",
                 title: "useCase"
             },
             {
                 name: "Tenting",
+                value: "Tenting",
                 title: "useCase"
             },
             {
                 name: "Camping",
+                value: "Camping",
                 title: "useCase"
             },
             {
                 name: "Search and rescue",
+                value: "Search and rescue",
                 title: "useCase"
             },
             {
                 name: "day boat",
+                value: "day boat",
                 title: "useCase"
             },
             {
                 name: "marine research",
+                value: "marine research",
                 title: "useCase"
             },
             {
                 name: "tender",
+                value: "tender",
                 title: "useCase"
             },
             {
                 name: "fishing",
+                value: "fishing",
                 title: "useCase"
             },
             {
                 name: "scuba/snorkel/swim",
+                value: "scuba/snorkel/swim",
                 title: "useCase"
             },
             {
                 name: "hunting",
+                value: "hunting",
                 title: "useCase"
             },
 

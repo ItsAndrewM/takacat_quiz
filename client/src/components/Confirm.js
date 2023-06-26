@@ -8,10 +8,14 @@ import AccessoryCard from "./AccessoryCard";
 import FeaturedCard from "./FeaturedCard";
 import Comparison from "./Comparison";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faWeightHanging, faGauge, faRulerCombined, faBoxOpen, faCampground, faSuitcaseRolling, faTruckFast } from "@fortawesome/free-solid-svg-icons"
+import { faUsers, faWeightHanging, faClipboardQuestion, faGauge, faRulerCombined, faBoxOpen, faCampground, faSuitcaseRolling, faTruckFast } from "@fortawesome/free-solid-svg-icons"
 import DinghySvg from "./DinghySvg";
 import { takaQuiz } from "../data/takaQuiz";
 import EngineSvg from "./EngineSvg";
+import ComparisonList from "./ComparisonList";
+import AccuracyBar from "./AccuracyBar";
+import { colorPicker } from "../helpers/colorPicker";
+import UseCaseString from "./UseCaseString";
 
 export const randomNum = (num) => {
     return Math.floor(Math.random() * num);
@@ -38,7 +42,11 @@ const getBiggestIndex = (object, list) => {
     let index = -1;
     Object.keys(object).forEach((ele) => {
         const model = list.findIndex((o) => {
-            return o[ele] === object[ele]
+            if (o[ele]) {
+                const str = object[ele].toLowerCase();
+                const compare = o[ele].toLowerCase();
+                return compare.includes(str)
+            }
         })
         if (model > index) {
             index = model;
@@ -53,6 +61,24 @@ const getBiggestIndex = (object, list) => {
 
 }
 
+const accuracyCal = (answerObj, modelObj) => {
+    let counter = 0;
+    let length = 0
+    Object.keys(answerObj).forEach((val) => {
+        if (answerObj[val] && modelObj[val]) {
+            if (modelObj[val].toLowerCase().includes(answerObj[val].toLowerCase())) {
+                counter += 1;
+            }
+            length += 1;
+        }
+        else if (!modelObj[val]) {
+            counter += 1;
+            length += 1;
+        }
+    })
+    return (Math.floor((counter / length) * 100))
+}
+
 const arr = [];
 
 const Confirm = () => {
@@ -62,6 +88,14 @@ const Confirm = () => {
     const { products } = useContext(ProductsContext)
     const [modelInfo, setModelInfo] = useState();
     const [customerVals, setCustomerVals] = useState();
+    const [percentage, setPercentage] = useState(0);
+    const [color, setColor] = useState();
+
+    useEffect(() => {
+        setFeatured([])
+        console.log("reset");
+        setModelInfo([]);
+    }, [])
 
 
     useEffect(() => {
@@ -83,9 +117,7 @@ const Confirm = () => {
                     if (l) {
                         arr.push(l);
                     }
-                    console.log(l)
                 }
-
             })
             setCustomerVals(arr)
         }
@@ -108,74 +140,80 @@ const Confirm = () => {
         }
     }, [products])
 
+    useEffect(() => {
+        if (modelInfo && location.state.formData) {
+            setPercentage(accuracyCal(location.state.formData, modelInfo))
+        }
+    }, [location.state.formData, modelInfo])
+
+    useEffect(() => {
+        if (percentage) {
+            setColor(colorPicker(percentage));
+        }
+    }, [percentage])
 
     return (
         <Wrapper>
             <Container>
-                <H1>Based on your answers, we reccomend...</H1>
+                {/* <H1>Based on your answers, we reccomend...</H1> */}
             </Container>
             <Container>
-                {featured ?
+                {featured && products && modelInfo && location.state.formData ?
                     <>
-                        {featured.map((val) => {
-                            return (
-                                <FeaturedCard val={val} />
-                            )
-                        })}
-                        <div style={{ width: "100%", border: "1px solid red" }}>
-                            <div style={{ width: "100%", display: "flex", justifyContent: "Center", flexWrap: "wrap", gap: "20px" }}>
-                                <H1>Your answers:</H1>
-                                <ModelContainer style={{ width: "100%", borderBottom: "1px solid black", display: "flex", justifyContent: "center", padding: ".5em 0", margin: "0 5em 0 5em" }}><DinghySvg />Takacat {modelInfo && modelInfo.model}</ModelContainer>
+                        <AnswersWrapper>
+                            <ListWrappers>
+                                <ModelContainer>
+                                    <DinghySvg />Takacat {modelInfo && modelInfo.model}
+                                </ModelContainer>
+                                <ModelContainer>
+                                    <p style={{ color: "black" }}>Your Answers <FontAwesomeIcon icon={faClipboardQuestion} /></p>
+                                </ModelContainer>
+                                <ModelContainer>
+                                    {modelInfo && percentage && color &&
+                                        <AccuracyBar percentage={percentage} color={color} modelInfo={modelInfo} />
+                                    }
+                                </ModelContainer>
                                 <ListContainer>
-                                    <ul style={{ listStyleType: "none", flexDirection: "column", alignItems: "flex-start" }}>
-                                        <Li style={{ justifyContent: "flex-end", paddingRight: ".5em" }}>{location.state.formData.capacity}<FontAwesomeIcon icon={faUsers} /></Li>
-                                        <Li style={{ justifyContent: "flex-end", paddingRight: ".5em" }}>{location.state.formData.ifOutboard}<EngineSvg /></Li>
-                                        <Li style={{ justifyContent: "flex-end", paddingRight: ".5em" }}>{location.state.formData.HP}<FontAwesomeIcon icon={faGauge} /></Li>
-                                        <Li style={{ justifyContent: "flex-end", paddingRight: ".5em" }}>{location.state.formData.weight}<FontAwesomeIcon icon={faTruckFast} /></Li>
-                                        <Li style={{ justifyContent: "flex-end", paddingRight: ".5em" }}>{location.state.formData.widthHeight}<FontAwesomeIcon icon={faSuitcaseRolling} /></Li>
-                                        <Li style={{ justifyContent: "flex-end", paddingRight: ".5em" }}>{location.state.formData.storage}<FontAwesomeIcon icon={faBoxOpen} /></Li>
-
-                                        {/* {Object.keys(location.state.formData).map((val, index) => {
-                                        return (
-                                            <li key={index} style={{ color: "black", textAlign: "left", width: "100%" }}>{val}: {location.state.formData[val]}</li>
-                                        )
-                                    })} */}
-                                    </ul>
-                                    <ul>
+                                    <Ul style={{ alignItems: "flex-start", width: "60%" }}>
+                                        {/* <Li style={{ justifyContent: "flex-end", padding: ".25em .5em", fontWeight: "bold", borderBottom: "1px solid black" }}>Your Answers<FontAwesomeIcon icon={faClipboardQuestion} /></Li> */}
+                                        <Li style={{ justifyContent: "flex-end", padding: ".25em .5em" }}>{location.state.formData.capacity}<FontAwesomeIcon icon={faUsers} /></Li>
+                                        <Li style={{ justifyContent: "flex-end", padding: ".25em .5em" }}>{location.state.formData.ifOutboard}<EngineSvg /></Li>
+                                        <Li style={{ justifyContent: "flex-end", padding: ".25em .5em" }}>{location.state.formData.HP}<FontAwesomeIcon icon={faGauge} /></Li>
+                                        <Li style={{ justifyContent: "flex-end", padding: ".25em .5em" }}>{location.state.formData.weight}<FontAwesomeIcon icon={faTruckFast} /></Li>
+                                        <Li style={{ justifyContent: "flex-end", padding: ".25em .5em" }}>{location.state.formData.widthHeight}<FontAwesomeIcon icon={faSuitcaseRolling} /></Li>
+                                        <Li style={{ justifyContent: "flex-end", padding: ".25em .5em" }}>{location.state.formData.storage}<FontAwesomeIcon icon={faBoxOpen} /></Li>
+                                    </Ul>
+                                    <Ul style={{ alignItems: "flex-end" }}>
+                                        {/* <Li style={{ fontWeight: "bold", borderBottom: "1px solid black" }}>We recomend the <span style={{ textDecoration: "underline" }}>Takacat {modelInfo.model}</span> with <span style={{ color: "red" }}>{percentage}%</span> accuracy</Li> */}
                                         {customerVals && modelInfo && customerVals.map((val) => {
-                                            // console.log(modelInfo[val.title])
-                                            modelInfo[val.title]
-
                                             return (
-                                                <div></div>
-                                                // <Li>{val.value === true || val.value === false ? (<Span>{val.value.toString()}</Span>) : (<Span>{val.value}</Span>)}</Li>
-                                                // <Li>{modelInfo[val.title].toLowerCase().includes(val.name) ? <Span style={{ backgroundColor: "limegreen" }}>{val.value}</Span> : <Span>{val.value}</Span>}</Li>
+                                                <ComparisonList modelInfo={modelInfo} val={val} />
                                             )
                                         })}
-                                        {/* <Li>{modelInfo.capacity}</Li>
-                                        <Li>{modelInfo.ifOutboard}</Li>
-                                        <Li>{modelInfo.HP}</Li>
-                                        <Li>{modelInfo.weight}</Li>
-                                        <Li>{modelInfo.widthHeight}</Li>
-                                        <Li>{modelInfo.storage}</Li> */}
-                                    </ul>
-                                    {/* <ul style={{ listStyleType: "none" }}>
-                                    {featured.map((val, index) => {
-                                        return (
-                                            <li key={index} style={{ color: "black", textAlign: "left", width: "100%" }}>{val.name}: </li>
-                                        )
-                                    })}
-                                </ul> */}
+                                    </Ul>
+                                    <Ul style={{ width: "40%" }}>
+                                        {featured.map((val) => {
+                                            return (
+                                                <Li>
+                                                    <FeaturedCard val={val} />
+                                                </Li>
+                                            )
+                                        })}
+                                    </Ul>
                                 </ListContainer>
-                            </div>
-                        </div>
+                            </ListWrappers>
+                        </AnswersWrapper>
                     </>
                     :
                     <CircularProgress />
                 }
             </Container>
             <Container>
-                <H1>These would also work with your Takacat { }</H1>
+                <H1>These would also work with your Takacat {modelInfo && modelInfo.model}</H1>
+                <p style={{ color: "black" }}>These accessories are good for: {location.state.formData.useCase && location.state.formData.useCase.length && (
+                    <UseCaseString array={location.state.formData.useCase} />
+                )}
+                </p>
             </Container>
             <Container>
                 {featuredAcc ? featuredAcc.map((val) => {
@@ -193,15 +231,39 @@ const Confirm = () => {
         </Wrapper>
     );
 }
+const Ul = styled.ul`
+    width: 100%;
+    display: flex;
+    list-style-type: none;
+    flex-direction: column;
+`
+const ListWrappers = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+`
 
-const Span = styled.span`
-    text-transform: capitalize;
+const AnswersWrapper = styled.div`
+    width: 100%;
+    border-bottom: 1px solid black;
+    padding-bottom: 1em;
+`
+
+const CardContainer = styled.div`
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+
 `
 
 const ListContainer = styled.div`
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     margin-top: .5em;
 `
 
@@ -209,9 +271,10 @@ const ModelContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
     border-bottom: 1px solid black;
     padding: .5em 0;
-    margin: 5em 0;
+    margin: 0 5em 0 5em;
 `
 
 const Li = styled.li`
@@ -248,37 +311,4 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 20px;
 `
-
-const H = styled.h3`
-    color: black;
-    width: 100%;
-    text-align: center;
-`
-
-const CardWrapper = styled.div`
-  width: 40%;
-  height: 30%;
-  margin: 3%;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-direction: column;
-  border-radius: 5px;
-  padding: 10px;
-`
-
-const ImageWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const NavItem = styled(NavLink)`
-    width: 100%;
-    height: 100%;
-`
-
-
 export default Confirm;
