@@ -40,7 +40,7 @@ const Comparison = ({ props }) => {
     console.log(prodInfo)
 
     return (
-        props && selection && products ? (
+        props && products ? (
             <>
                 <Table>
                     <TableHeader style={{ padding: "1em 0" }}><H1>Your Takacat:</H1></TableHeader>

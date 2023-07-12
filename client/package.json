@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://dinghy-finder.vercel.app",
   "proxy": "http://localhost:8080",
   "dependencies": {
     "@emotion/react": "^11.11.1",
