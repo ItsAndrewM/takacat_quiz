@@ -1,6 +1,6 @@
 export const quiz = [
   {
-    title: "Takacat Boat Model Finder",
+    title: "Dinghy Model Finder",
     content:
       "Weather protection, warmth, breathable comfort, freedom of movement, enhanced durability – we offer it all. Find what’s right for you.",
     choicesId: 0,
