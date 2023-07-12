@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
-import ModelFinder from "./components/ModelFinder";
+import ModelFinder from "./pages/ModelFinder";
 import GlobalStyles from "./GlobalStyles";
-import Input from "./components/Input";
-import Confirm from "./components/Confirm";
+import Input from "./pages/Input";
+import Confirm from "./pages/Confirm";
 
 const App = () => {
   return (

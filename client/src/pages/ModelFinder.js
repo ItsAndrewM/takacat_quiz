@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { quiz } from "../data/quiz";
-import Question from "./Question";
-import Answers from "./Answers";
+import Question from "../components/Question";
+import Answers from "../components/Answers";
 import backgroundBoat from "../assets/pexels-matheus-guimarães-611328.jpg";
 
 const ModelFinder = () => {

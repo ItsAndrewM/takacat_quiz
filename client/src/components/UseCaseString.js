@@ -7,24 +7,24 @@ const UseCaseString = ({ array }) => {
                 if (index + 1 !== array.length) {
                     if (!val.includes("ing")) {
                         return (
-                            <span>{val}ing, </span>
+                            <span key={index}>{val}ing, </span>
                         )
                     }
                     else {
                         return (
-                            <span>{val}, </span>
+                            <span key={index}>{val}, </span>
                         )
                     }
                 }
                 else {
                     if (!val.includes("ing")) {
                         return (
-                            <span>{val}ing</span>
+                            <span key={index}>{val}ing</span>
                         )
                     }
                     else {
                         return (
-                            <span>{val}</span>
+                            <span key={index}>{val}</span>
                         )
                     }
                 }

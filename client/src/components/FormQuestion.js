@@ -18,7 +18,9 @@ const FormQuestion = ({ q, qIndex, setQIndex }) => {
                     return (
                         <Label key={index}>
                             <Input type={q.type} name={a.title} value={a.name} />
-                            <Span>{a.name}</Span>
+                            <Span>{a.name}
+                                {a.icon && (a.icon)}
+                            </Span>
                         </Label>
                     )
                 })
@@ -100,6 +102,8 @@ const Span = styled.span`
     backdrop-filter: blur(9px);
     color: white;
     background: inherit;
+    display: Flex;
+    flex-direction: column-reverse;
       &:hover {
         cursor: pointer;
         border: 2px solid var(--accent-secondary-color);

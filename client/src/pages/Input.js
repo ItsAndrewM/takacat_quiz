@@ -1,10 +1,11 @@
 import styled from "styled-components/macro";
 import { takaQuiz } from "../data/takaQuiz";
-import FormQuestion from "./FormQuestion";
-import { useEffect, useState } from "react";
+import FormQuestion from "../components/FormQuestion";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backgroundBoat from "../assets/pexels-matheus-guimarães-611328.jpg";
 import next from "../assets/sound/next.mp3"
+import { FormContext } from "../context/FormContext";
 
 const playSound = (soundFile) => {
     new Audio(soundFile).play();
@@ -15,8 +16,8 @@ const Input = () => {
     const [qIndex, setQIndex] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [anArr, setAnArr] = useState([]);
+    const { action } = useContext(FormContext);
 
-    let obj = {};
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -58,6 +59,7 @@ const Input = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        action.receiveNewFormData(formData)
         navigate("/confirmation", { state: { formData: formData } })
     }
 

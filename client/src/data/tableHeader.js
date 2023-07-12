@@ -7,10 +7,10 @@ export const tableHeader = [
         name: "Product",
         icon: ""
     },
-    {
-        name: "Activities",
-        icon: <FontAwesomeIcon icon={faCampground} />
-    },
+    // {
+    //     name: "Activities",
+    //     icon: <FontAwesomeIcon icon={faCampground} />
+    // },
     {
         name: "Model Number",
         icon: <DinghySvg />

@@ -12,8 +12,9 @@ const ComparisonList = ({ modelInfo, val }) => {
     return (
         <Li>
             {modelInfo[val.title] ?
-                (<Span>
-                    {modelInfo[val.title].toLowerCase().includes((val.name).toLowerCase()) ?
+                (
+
+                    modelInfo[val.title].toLowerCase().includes((val.name).toLowerCase()) ?
                         (
                             <GreenSpan>
                                 {withoutColon && withoutColon}
@@ -24,8 +25,9 @@ const ComparisonList = ({ modelInfo, val }) => {
                             <Span>
                                 {withoutColon && withoutColon}
                             </Span>
-                        )}
-                </Span>)
+                        )
+
+                )
                 : (<GreenSpan>{val.name}</GreenSpan>)}
         </Li>
     );
@@ -37,12 +39,15 @@ const GreenSpan = styled.span`
     border-radius: .5em;
     padding: .25em .5em;
     color: white;
-
+    width: 100%;
 `
 
 const Span = styled.span`
     /* text-transform: capitalize; */
-    padding: .25em .5em
+    padding: .25em .5em;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
 `
 
 const Li = styled.li`
