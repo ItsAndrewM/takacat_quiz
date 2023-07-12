@@ -81,7 +81,7 @@ export const takaQuiz = [
         ]
     },
     {
-        title: "How many people will you have on board.",
+        title: "How many people will you have on board?",
         content:
             "Determine the capacity needed to accommodate your adventurous crew during thrilling outings.",
         type: "radio",
